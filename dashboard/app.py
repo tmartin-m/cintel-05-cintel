@@ -1,4 +1,4 @@
-from shiny import reactive, render
+fom shiny import reactive, render
 from shiny.express import ui, input
 from shinywidgets import render_plotly
 import random
@@ -14,7 +14,7 @@ from faicons import icon_svg
 
 UPDATE_INTERVAL_SECS: int = 3
 DEQUE_SIZE: int = 5
-reactive_value_wrapper = reactive.value(deque(maxlen=DEQUE_SIZE))
+reactive_value_wrapper = reactive.value(deque(maxlen=DEQUE_SIZE))r
 
 # --- Reactive Calculation for Live Data ---
 
@@ -74,7 +74,7 @@ with ui.layout_columns(col_widths=(6, 6)):
             caption=status
         )
 
-    with ui.card(full_screen=True):
+    with ui.card():
         ui.card_header("Current Date and Time")
 
         @render.text
@@ -82,7 +82,7 @@ with ui.layout_columns(col_widths=(6, 6)):
             _, _, latest = live_data() 
             return latest["timestamp"]
 
-with ui.layout_columns(col_widths=(6, 6)):
+with ui.layout_columns(col_widths=(4, 8)):
     with ui.card(full_screen=True):
         ui.card_header("Most Recent Readings")
 
