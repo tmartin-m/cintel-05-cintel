@@ -1,4 +1,4 @@
-fom shiny import reactive, render
+from shiny import reactive, render
 from shiny.express import ui, input
 from shinywidgets import render_plotly
 import random
@@ -14,7 +14,7 @@ from faicons import icon_svg
 
 UPDATE_INTERVAL_SECS: int = 3
 DEQUE_SIZE: int = 5
-reactive_value_wrapper = reactive.value(deque(maxlen=DEQUE_SIZE))r
+reactive_value_wrapper = reactive.value(deque(maxlen=DEQUE_SIZE))
 
 # --- Reactive Calculation for Live Data ---
 
@@ -48,9 +48,16 @@ with ui.sidebar(open="open"):
     
     ui.input_numeric("temp_threshold", "Alert Threshold (°C)", value=-17.0, step=0.1)
 
+    ui.input_radio_buttons(
+        "chart_type",
+        "Chart Type",
+        choices=["Scatter", "Line"],
+        selected="Scatter"
+    )
+
     ui.hr()
     ui.h6("Links:")
-    ui.a("GitHub Source", href="https://github.com/denisecase/cintel-05-cintel", target="_blank")
+    ui.a("GitHub Source", href="https://github.com/tmartin-m/cintel-05-cintel/blob/main/dashboard/app.py", target="_blank")
     ui.a("GitHub App", href="https://denisecase.github.io/cintel-05-cintel/", target="_blank")
     ui.a("PyShiny", href="https://shiny.posit.co/py/", target="_blank")
     ui.a("PyShiny Express", href="https://shiny.posit.co/blog/posts/shiny-express/", target="_blank")
@@ -101,16 +108,26 @@ with ui.layout_columns(col_widths=(4, 8)):
                 return px.scatter()
 
             df["timestamp"] = pd.to_datetime(df["timestamp"])
+            chart_type = input.chart_type()
 
-            # Scatter plot
-            fig = px.scatter(
-                df,
-                x="timestamp",
-                y="temp",
-                title="Temperature Readings with Regression Line",
-                labels={"temp": "Temperature (°C)", "timestamp": "Time"},
-                color_discrete_sequence=["blue"],
-            )
+            if chart_type == "Line":
+                fig = px.line(
+                    df,
+                    x="timestamp",
+                    y="temp",
+                    title="Temperature Readings (Line Chart)",
+                    labels={"temp": "Temperature (°C)", "timestamp": "Time"},
+                    line_shape="spline"
+                )
+            else:
+                fig = px.scatter(
+                    df,
+                    x="timestamp",
+                    y="temp",
+                    title="Temperature Readings (Scatter Plot)",
+                    labels={"temp": "Temperature (°C)", "timestamp": "Time"},
+                    color_discrete_sequence=["blue"],
+                )
 
             # Add regression line if enough data
             if len(df) >= 2:
