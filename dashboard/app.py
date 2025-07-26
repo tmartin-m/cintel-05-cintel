@@ -58,7 +58,6 @@ with ui.sidebar(open="open"):
     ui.hr()
     ui.h6("Links:")
     ui.a("GitHub Source", href="https://github.com/tmartin-m/cintel-05-cintel/blob/main/dashboard/app.py", target="_blank")
-    ui.a("GitHub App", href="https://denisecase.github.io/cintel-05-cintel/", target="_blank")
     ui.a("PyShiny", href="https://shiny.posit.co/py/", target="_blank")
     ui.a("PyShiny Express", href="https://shiny.posit.co/blog/posts/shiny-express/", target="_blank")
 
@@ -153,6 +152,11 @@ with ui.layout_columns(col_widths=(4, 8)):
                     mode="lines",
                     name="Threshold",
                     line=dict(color="red", dash="dash")
+                )
+            )
+
+            fig.update_layout(xaxis_title="Time", yaxis_title="Temperature (°C)")
+            return fig
                 )
             )
 
